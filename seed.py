@@ -2,7 +2,7 @@
 
 from sqlalchemy import func
 from model import User
-# from model import Rating
+from model import Rating
 from model import Movie
 
 from model import connect_to_db, db
@@ -50,7 +50,8 @@ def load_movies():
 
         s = releasedate #form is given to us like '31-Oct-2015'
         print "This is our S = released date: " , s
-        if not s:
+        if not s: #if the releateddate field string is empty, 
+        #add this fake release date
             s += "14-Apr-1991"
         #if s is empty, do something....do we want to
         #add it or remove it? 
@@ -74,9 +75,17 @@ def load_ratings():
     Rating.query.delete()
 
     for row in open("seed_data/u.data"):
-        row = row.rstrip().split("|")
-        print row
-        user_id, movie_id, score = row [:3]
+        row = row.rstrip().split("\t")
+        print "THIS IS WHAT WE ARE LOOKING FOR: " ,row[:3]
+        user_id, movie_id, score = row[:3]
+
+        rating = Rating(movie_id=movie_id,
+                        user_id=user_id,
+                        score=score)
+
+        db.session.add(rating)
+
+    db.session.commit()
 
 
 

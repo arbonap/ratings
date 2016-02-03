@@ -49,7 +49,6 @@ class Rating(db.Model):
     score = db.Column(db.Integer, nullable=False)
 
 
-
 ##############################################################################
 # Helper functions
 
