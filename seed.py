@@ -45,11 +45,15 @@ def load_movies():
     #read u.item file and insert data
     for row in open("seed_data/u.item"):
         row = row.rstrip().split("|")
-        print "Movie Row ", row
-        movieid, movietitle, releasedate, vidreleasedate, IMDbURL= row[:5]
+        movieid = row[0]
+        movietitle = row[1]
+        releasedate = row[2]
+        IMDbURL = row[4]
+
+        if "(" in movietitle:
+            movietitle = movietitle[:-6]
 
         s = releasedate #form is given to us like '31-Oct-2015'
-        print "This is our S = released date: " , s
         if not s: #if the releateddate field string is empty, 
         #add this fake release date
             s += "14-Apr-1991"
@@ -76,7 +80,6 @@ def load_ratings():
 
     for row in open("seed_data/u.data"):
         row = row.rstrip().split("\t")
-        print "THIS IS WHAT WE ARE LOOKING FOR: " ,row[:3]
         user_id, movie_id, score = row[:3]
 
         rating = Rating(movie_id=movie_id,
