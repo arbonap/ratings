@@ -51,7 +51,7 @@ def load_movies():
         IMDbURL = row[4]
 
         if "(" in movietitle:
-            movietitle = movietitle[:-6]
+            movietitle = movietitle[:-7]
 
         s = releasedate #form is given to us like '31-Oct-2015'
         if not s: #if the releateddate field string is empty, 
@@ -89,7 +89,6 @@ def load_ratings():
         db.session.add(rating)
 
     db.session.commit()
-
 
 
 def set_val_user_id():

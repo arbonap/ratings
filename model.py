@@ -46,14 +46,22 @@ class Movie(db.Model):
 
 
 class Rating(db.Model):
+    """Rating of a movie by a user."""
 
     __tablename__ = "ratings"
 
     rating_id = db.Column(db.Integer, autoincrement=True, primary_key=True)
-    movie_id = db.Column(db.Integer, nullable=False)
-    user_id = db.Column(db.Integer, nullable=False)
+    movie_id = db.Column(db.Integer, db.ForeignKey('movies.movie_id')) #ForeignKey refernces another column in another table
+    user_id = db.Column(db.Integer, db.ForeignKey('users.user_id'))
     score = db.Column(db.Integer, nullable=False)
 
+    #Define relationship to user
+    user = db.relationship("User",
+                            backref=db.backref("ratings", order_by=rating_id))
+
+    #Define relationship to movie
+    movie = db.relationship("Movie",
+                            backref=db.backref("ratings", order_by=rating_id))
     def __repr__(self):
         """Provide helpful representation when printed."""
 
@@ -69,6 +77,7 @@ def connect_to_db(app):
     app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql:///ratings'
     db.app = app
     db.init_app(app)
+
 
 
 if __name__ == "__main__":
