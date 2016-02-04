@@ -1,0 +1,17 @@
+{% extends 'base.html' %}
+{% block content %}
+
+<h1>Sign In Form</h1>
+
+    <h4> Please fill out the following form: </h4>
+
+<form action="/process_signin" method="POST">
+    <label for="field-username"> Username: </label>
+    <input type="text" name="username"><br>
+
+    <label for="password" id="field-lastname"> Password: </label>
+    <input type="text" name="password"><br>
+    
+    <input type="submit">
+
+{% endblock %}

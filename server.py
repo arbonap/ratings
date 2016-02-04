@@ -40,14 +40,21 @@ def process_signin():
     input_username = request.form.get("username")
     input_password = request.form.get("password")
 
-    user = User.query.filter(User.username==input_username,User.password==input_password).all()
-    if input_username not in user:
-        print "NOT HERE!!!!!!!!"
-    print user
+    user_list = User.query.filter(User.email==input_username,User.password==input_password).all()
+    print "This is our user!" , user
 
-    # return render_template("process_signin.html",
-    #                         username=input_username,
-    #                         password=input_password)
+    if user_list == []:
+        new_user = User(email=input_username,password=input_password)
+        db.session.add(new_user)
+        db.session.commit()
+        print "ADDED TO DB"
+    else:
+        print "YOUR USER EXISTS!!!!" #put in flash message and redirect to new page
+
+
+    print "THIS IS OUR NEW USER!!!" , new_user
+    return redirect("/sign_in")
+####NOTE TO FUTURE SELF: RENDER TEMPLATE HERE AND REDIRECT TO INDEX PAGE IF SIGN IN FAILS AND ADD STUFF TO DATABASE
 
 
 @app.route('/users')
