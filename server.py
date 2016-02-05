@@ -60,9 +60,10 @@ def process_signin():
         session["user_id"] = user_id # logging the user in
         flash("Successfuly logged in")
 
-    return redirect("/")
+    return redirect("/user_details")
 
     user_id = user_list[0]
+
 
 @app.route('/logged_out')
 def logged_out():
@@ -81,11 +82,26 @@ def user_list():
     users = User.query.all()
     return render_template("user_list.html", users=users)
 
-@app.route('/user_details')
-def user_demographics():
+@app.route('/user_details/<int:user_id>')
+def user_demographics(user_id):
+    """Give back zip code, age, and list of rated movies with 
+    ratings based on a users id."""
 
-    return render_template()
+    user = User.query.get(user_id)
 
+    user_zipcode = user.zipcode
+    user_age = user.age
+    user_rating = user.rating
+    rated_movie = ratings.user_id
+
+
+    return render_template("user_details.html", 
+                            zipcode=user_zipcode,
+                            age=user_age,
+                            rating=user_rating,
+                            rated_movie=rated_movie
+                            )
+# the list of movies they rated and the scores for each rating
 
 if __name__ == "__main__":
     # We have to set debug=True here, since it has to be True at the point
