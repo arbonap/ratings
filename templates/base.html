@@ -10,5 +10,12 @@
 
   {% block content %} put your content here {% endblock %}
 
+    <!-- Show flashed messages -->
+  {% with messages = get_flashed_messages() %}
+      {% for message in messages %}
+          <div>{{ message }}</div>
+      {% endfor %}
+  {% endwith %}
+
 </body>
 </html>

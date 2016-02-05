@@ -40,21 +40,38 @@ def process_signin():
     input_username = request.form.get("username")
     input_password = request.form.get("password")
 
+    # checking to see if we have an account with the user's inputted email and password
     user_list = User.query.filter(User.email==input_username,User.password==input_password).all()
-    print "This is our user!" , user
-
+    # 
+    # if we didn't find any user by that name and email 
     if user_list == []:
+        # create new user and adding to database
         new_user = User(email=input_username,password=input_password)
         db.session.add(new_user)
-        db.session.commit()
+        db.session.commit() #the database gives the user its user id at this point
+        user_id = new_user.user_id
+        session["user_id"] = user_id
         print "ADDED TO DB"
     else:
+        # our user exists
         print "YOUR USER EXISTS!!!!" #put in flash message and redirect to new page
+        # 
+        user_id = user_list[0].user_id
+        session["user_id"] = user_id # logging the user in
+        flash("Successfuly logged in")
 
+    return redirect("/")
 
-    print "THIS IS OUR NEW USER!!!" , new_user
-    return redirect("/sign_in")
-####NOTE TO FUTURE SELF: RENDER TEMPLATE HERE AND REDIRECT TO INDEX PAGE IF SIGN IN FAILS AND ADD STUFF TO DATABASE
+    user_id = user_list[0]
+
+@app.route('/logged_out')
+def logged_out():
+    """Log out user"""
+
+    del session["user_id"]
+    flash("Successfuly logged out")
+
+    return redirect("/")
 
 
 @app.route('/users')
@@ -63,6 +80,11 @@ def user_list():
 
     users = User.query.all()
     return render_template("user_list.html", users=users)
+
+@app.route('/user_details')
+def user_demographics():
+
+    return render_template()
 
 
 if __name__ == "__main__":
